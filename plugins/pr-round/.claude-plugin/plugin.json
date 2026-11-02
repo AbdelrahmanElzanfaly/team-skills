@@ -1,0 +1,5 @@
+{
+  "name": "pr-round",
+  "description": "Review every open PR, detect conflicts between PRs, and accept, reject or comment on each one",
+  "author": { "name": "AbdelrahmanElzanfaly" }
+}
