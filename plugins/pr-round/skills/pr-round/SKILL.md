@@ -23,6 +23,9 @@ the step that needs them:
 
 - Nothing is written to GitHub without the user's answer for that specific PR.
   An answer for one PR never carries over to the next.
+- No text is ever posted under the user's name without their approval of that exact
+  text. Every review body, comment, inline comment and close comment goes through
+  the text approval in Step 6 first. Choosing an action is not approval of its text.
 - Never push commits, force-push, create or delete branches, change repository
   settings, or touch the user's working tree. All git work uses commit ids with
   `git merge-tree`, `git commit-tree`, `git diff`, `git show` and `git grep` only.
@@ -105,13 +108,32 @@ Before any write action, check the PR is still open and its head did not move:
 `gh pr view <n> --repo <repo> --json state,headRefOid,mergeable`. If the head moved
 since the review, say so and ask whether to re-review it first.
 
+### Text approval
+
+Before posting any text on GitHub (a review body, a comment, inline comments, or a
+comment on close):
+
+1. Write the draft in English to a file in the scratchpad directory and show the
+   full text to the user in a code block. For inline comments, show every one with
+   its file and line.
+2. Ask with `AskUserQuestion`: **Post as is**, **Edit** (the user writes the changes
+   or the new text in "Other"), or **Don't post text**. For an approval, the last
+   option means approving with no body; for a rejection, it means cancelling the
+   rejection, since GitHub needs a body to request changes; for a comment, it means
+   posting nothing.
+3. If the user edits, apply the edits, show the final text again and ask again. Post
+   only the text the user approved, exactly as approved, from the file.
+
 ### Accept and merge
 
 1. Check CI (`gh pr checks <n>`), `mergeable` and the merge impact. If CI fails, the
    PR conflicts with its base, or branch protection blocks it, explain and ask again.
    If merging it will make other PRs conflict, remind the user which ones.
-2. Approve, unless the user is the author:
-   `gh pr review <n> --repo <repo> --approve --body "<short English summary>"`.
+2. Approve, unless the user is the author. Draft a short English summary and run it
+   through the text approval. Then either
+   `gh pr review <n> --repo <repo> --approve --body-file <file>` with the approved
+   text, or `gh pr review <n> --repo <repo> --approve` with no body if the user chose
+   not to post text.
    If the user is the author, tell them GitHub does not allow it and continue to merge.
 3. Merge method: use the one the repository already uses (look at recent merged PRs
    with `gh pr list --state merged --limit 10 --json mergeCommit,title`); if it is not
@@ -125,17 +147,21 @@ since the review, say so and ask whether to re-review it first.
    changes and close the PR. (GitHub cannot delete a PR; closing is the most it allows.)
 2. Write the findings in English to a file in the scratchpad directory: one line per
    issue with severity, file and line, problem and suggested fix, plus any conflicts
-   with other PRs the author must resolve.
-3. `gh pr review <n> --repo <repo> --request-changes --body-file <file>`.
+   with other PRs the author must resolve. Run it through the text approval.
+3. With the approved text:
+   `gh pr review <n> --repo <repo> --request-changes --body-file <file>`.
    If the user is the author, post it with `gh pr comment` instead and say so.
-4. If they chose to close too: `gh pr close <n> --repo <repo>`. Do not delete the branch.
+4. If they chose to close too: `gh pr close <n> --repo <repo>`, with no comment unless
+   the user asks for one (which also goes through the text approval). Do not delete
+   the branch.
 
 ### Comment
 
 1. Draft the comment in English from the findings (or from what the user typed in
-   "Other"), show it to the user in a code block and ask them to confirm or edit it.
-2. After their confirmation: `gh pr comment <n> --repo <repo> --body-file <file>`.
-3. For line-specific findings, the user may ask for inline comments; then use
+   "Other") and run it through the text approval.
+2. With the approved text: `gh pr comment <n> --repo <repo> --body-file <file>`.
+3. For line-specific findings, the user may ask for inline comments. Run all of them
+   through the text approval, then post only the approved ones with
    `gh api repos/<repo>/pulls/<n>/comments` with `commit_id`, `path`, `line` and
    `side: RIGHT`, one call per finding.
 
