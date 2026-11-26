@@ -53,3 +53,39 @@ Optional arguments:
 ```
 
 Then update the plugin from the Installed tab of `/plugin`.
+
+## task-flow
+
+One task, end to end, with your approval at every gate:
+
+1. Define the task: a short spec you approve or edit.
+2. Upload it to your task manager (ClickUp, Jira, Linear, GitHub Issues, or none) after you approve the preview.
+3. Ask before starting.
+4. Build it in its own git worktree cut from your base branch, with tests, and commit locally.
+5. Ask before pushing, opening the PR and merging; then update your main checkout.
+6. Ask before setting the task to complete.
+
+On first use in a project it asks for your task manager, where tasks go, your
+statuses, base branch, worktree folder, branch naming, setup and test commands,
+and merge method, and saves them to `.claude/task-flow.json`.
+
+### Requirements
+
+- Claude Code (terminal or the Code tab of the desktop app)
+- git 2.20 or newer, and GitHub CLI signed in: `gh auth login`
+- Access to your task manager: its MCP server connected in Claude Code, or its CLI
+
+### Install
+
+```
+/plugin marketplace add AbdelrahmanElzanfaly/team-skills
+/plugin install task-flow@team-skills
+```
+
+### Use
+
+```
+/task-flow:task-flow Add a password reset screen
+/task-flow:task-flow setup
+/task-flow:task-flow status
+```

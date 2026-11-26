@@ -1,12 +1,19 @@
 {
   "name": "team-skills",
-  "owner": { "name": "AbdelrahmanElzanfaly" },
-  "description": "Team code review skills for Claude Code",
+  "owner": {
+    "name": "AbdelrahmanElzanfaly"
+  },
+  "description": "Team skills for Claude Code: PR review rounds and the task workflow",
   "plugins": [
     {
       "name": "pr-round",
       "source": "./plugins/pr-round",
       "description": "Review, conflict check and merge round for open PRs"
+    },
+    {
+      "name": "task-flow",
+      "source": "./plugins/task-flow",
+      "description": "Define, upload, build in a worktree, merge and complete a task, with your approval at every step"
     }
   ]
 }

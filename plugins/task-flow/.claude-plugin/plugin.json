@@ -1,0 +1,5 @@
+{
+  "name": "task-flow",
+  "description": "Task lifecycle with approval gates: define the task, upload it to your task manager, build it in a git worktree, merge it, and mark it complete",
+  "author": { "name": "AbdelrahmanElzanfaly" }
+}
