@@ -58,12 +58,16 @@ Then update the plugin from the Installed tab of `/plugin`.
 
 One task, end to end, with your approval at every gate:
 
-1. Define the task: a short spec you approve or edit.
+1. Define the task: a short spec you approve or edit, with design images for screen changes,
+   and a proposed split into smaller tasks when it is too large for one PR.
 2. Upload it to your task manager (ClickUp, Jira, Linear, GitHub Issues, or none) after you approve the preview.
 3. Ask before starting.
-4. Build it in its own git worktree cut from your base branch, with tests, and commit locally.
-5. Ask before pushing, opening the PR and merging; then update your main checkout.
+4. Build it in its own git worktree cut from your base branch, with tests, review the diff, and commit locally.
+5. Ask before pushing, opening the PR and merging; then comment the PR link on the task and update your main checkout.
 6. Ask before setting the task to complete.
+
+Away mode: tell it you are away (for example "I'm away") after approving the spec, and it runs
+the remaining steps without waiting, stopping only on failures, conflicts or blocked merges.
 
 On first use in a project it asks for your task manager, where tasks go, your
 statuses, base branch, worktree folder, branch naming, setup and test commands,
