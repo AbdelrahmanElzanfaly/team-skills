@@ -66,6 +66,10 @@ One task, end to end, with your approval at every gate:
 5. Ask before pushing, opening the PR and merging; then comment the PR link on the task and update your main checkout.
 6. Ask before setting the task to complete.
 
+Project rules: it reads every `AGENTS.md` that applies (the root one and those in the folders it
+touches) before the spec and again inside the worktree, builds by them, reviews the diff against
+them, and asks you when a rule conflicts with the task.
+
 Away mode: tell it you are away (for example "I'm away") after approving the spec, and it runs
 the remaining steps without waiting, stopping only on failures, conflicts or blocked merges.
 

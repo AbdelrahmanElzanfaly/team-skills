@@ -41,6 +41,29 @@ Away mode).
   are not yours.
 - If a command fails, show the error and ask how to continue; do not retry in a loop.
 
+## Project rules (`AGENTS.md`)
+
+The project's `AGENTS.md` files are the coding rules for every task. They win
+over your own habits and over anything this skill leaves open.
+
+- Which files apply: the `AGENTS.md` at the repository root, plus every
+  `AGENTS.md` in a folder on the path to each file you will touch (for
+  `lib/features/auth/login/x.dart`: `lib/AGENTS.md`, `lib/features/AGENTS.md`,
+  and so on). When two of them disagree, the one closest to the file wins.
+  Also read the files `AGENTS.md` itself points to, and `CLAUDE.md` and
+  `CONTRIBUTING.md` where they exist.
+- Read them for real, in full, before the spec (Step 1) and again inside the
+  new worktree before writing code (Step 4), because the base branch may have
+  changed them. Do not work from memory or a summary of an earlier read.
+- Plan with them: the spec places files, names, layers and patterns the way the
+  rules say, and says which rules shape the work.
+- If a rule conflicts with the spec or the user's request, stop and ask which
+  one wins. Never break a rule silently, and never edit `AGENTS.md` unless the
+  task is to change the rules and the user approved that.
+- If the project has no `AGENTS.md`, say so once, follow the patterns of the
+  nearest existing code, and offer to draft one as a separate task.
+- In away mode, a conflict with a rule still stops the flow.
+
 ## Away mode
 
 When the user says they are away from the computer (one of `away_phrases` in
@@ -98,7 +121,9 @@ Repository and worktrees
 - Code review before merge: the command to use if there is one (for example
   `/code-review`), else a manual review of the diff.
 - Away phrases: the words that mean "run the remaining gates without me".
-- Project rules to follow: `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md` if present.
+- Project rules: list the `AGENTS.md` files found (`git ls-files '*AGENTS.md'`),
+  plus `CLAUDE.md` and `CONTRIBUTING.md`, and confirm them with the user. If
+  there is no `AGENTS.md`, say so.
 
 Show the collected config, ask for approval, then write it to
 `.claude/task-flow.json`. Ask whether it should be committed for the team or
@@ -143,21 +168,24 @@ kept local (if local, add it to `.git/info/exclude`). Shape:
 
 ## Step 1. Define the task
 
-1. Understand the request. Read the relevant code, design or API docs the user
+1. Read the applicable `AGENTS.md` files in full (see Project rules).
+2. Understand the request. Read the relevant code, design or API docs the user
    points to, and compare them with what the code does now.
-2. Write a short spec in the chat:
+3. Write a short spec in the chat:
    - Goal: what the user will see or get when it is done.
    - Scope: what changes and what explicitly does not.
    - Details: screens or endpoints, states (loading, empty, error, success),
      validation, edge cases.
+   - Rules: the `AGENTS.md` rules that shape this task (where files go,
+     patterns to use), and any conflict between a rule and the request.
    - Tests: what will be tested.
    - Open questions, each with your recommendation.
-3. Design previews: if the task changes a screen and `design_previews.enabled`
+4. Design previews: if the task changes a screen and `design_previews.enabled`
    is true, render images of every new or changed state the way the config says
    (prefer the project's real components over mockups), save them under
    `<design_previews.dir>/<NN>-<task>/`, share them with the spec, then delete any
    temporary test or script used to render them. Skip images when no screen changes.
-4. Ask: "Approve the spec, or tell me what to change?" Wait. Revise until approved.
+5. Ask: "Approve the spec, or tell me what to change?" Wait. Revise until approved.
 
 If the change is trivial and the user says so, keep the spec to two or three lines.
 
@@ -208,22 +236,28 @@ says start.
    Use a short kebab-case `<name>`; add the task ID if `task_id_in_branch` is true.
    If the branch or folder already exists, ask before reusing or replacing it.
 3. Run `setup_command` inside the worktree.
-4. Work only inside the worktree. Follow the project's rules files. Change only
-   what the spec covers; format only the files you changed.
-5. Write or update tests for the change (unit, and UI/widget where the change is
+4. Read the applicable `AGENTS.md` files again from the worktree, in full, and
+   note any rule that changed since the spec.
+5. Work only inside the worktree, following those rules for every file you add
+   or change (structure, naming, patterns, styling, tests). Change only what the
+   spec covers; format only the files you changed. If a rule blocks the spec,
+   stop and ask.
+6. Write or update tests for the change (unit, and UI/widget where the change is
    visible). Run lint and every check that is not in `slow_checks` until all pass.
    Run slow checks only when the user asks, and say in the report that they were
    not run.
-6. For visual changes, capture screenshots or rendered images and share them.
-7. Commit locally with a clear English message (no push yet).
-8. Code review before asking to merge: review the full diff against the base
+7. For visual changes, capture screenshots or rendered images and share them.
+8. Commit locally with a clear English message (no push yet).
+9. Code review before asking to merge: review the full diff against the base
    branch (`git diff origin/<base_branch>...HEAD`) with `code_review.command` if
-   set, else by reading it yourself. Look for correctness bugs, missed spec
-   items, broken project rules, missing tests, secrets and leftover debug code.
+   set, else by reading it yourself. Check every changed file against each
+   rule of the `AGENTS.md` files that apply to it, then look for correctness
+   bugs, missed spec items, missing tests, secrets and leftover debug code.
    Fix the real problems inside the spec's scope, rerun the checks, and commit.
    List anything you chose not to fix, with the reason.
-9. Report: what changed, a table of checks with results, the review findings and
-   what was fixed, and what was not verified.
+10. Report: what changed, a table of checks with results, which `AGENTS.md`
+   files the work was checked against and any rule left unmet (with the reason),
+   the review findings and what was fixed, and what was not verified.
 
 ## Step 5. Ask to push and merge
 
