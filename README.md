@@ -56,6 +56,8 @@ Then update the plugin from the Installed tab of `/plugin`.
 
 ## task-flow
 
+One-page overview: [task-flow-overview.pdf](task-flow-overview.pdf)
+
 One task, end to end, with your approval at every gate:
 
 1. Define the task: a short spec you approve or edit, with design images for screen changes,
