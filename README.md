@@ -77,6 +77,10 @@ On first use in a project it asks for your task manager, where tasks go, your
 statuses, base branch, worktree folder, branch naming, setup and test commands,
 and merge method, and saves them to `.claude/task-flow.json`.
 
+Language: it talks to you in English by default. The first setup question is which
+language you want for the chat (for example Arabic); tasks, commits and pull requests
+always stay in English. Run `/task-flow:task-flow setup` to change it later.
+
 ### Requirements
 
 - Claude Code (terminal or the Code tab of the desktop app)
